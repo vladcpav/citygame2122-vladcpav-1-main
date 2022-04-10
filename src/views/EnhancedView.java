@@ -1,5 +1,6 @@
 package views;
 
+import characters.Player;
 import city.cs.engine.UserView;
 import levels.Level;
 
@@ -24,11 +25,20 @@ public class EnhancedView extends UserView {
         g.fillRect(50, 30, 240, 30);
         g.setColor(Color.GREEN);
 
-        float hitpoint = ((Level) this.getWorld()).getPlayer().getHitpoint();
+        Player player = ((Level) this.getWorld()).getPlayer();
+        float hitpoint = player.getHitpoint();
 
         g.fillRect(50, 30, Math.round((hitpoint / 100) * 240), 30);
 
         g.setColor(Color.BLACK);
+
+
+        // Ammo
+
+        int ammo = player.getAmmo();
+
+        g.drawString("Ammo", 300, 20);
+        g.drawString(Integer.toString(ammo), 300, 50);
     }
 
     protected void paintBackground(Graphics2D g) {

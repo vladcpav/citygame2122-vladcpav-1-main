@@ -65,6 +65,12 @@ public class Game {
 
                 if (e.getKeyCode() == 87) {
                     player.jump();
+                    return;
+                }
+
+                if (e.getKeyCode() == 32) {
+                    player.shoot();
+                    return;
                 }
             }
 
@@ -82,6 +88,12 @@ public class Game {
 
                 if (e.getKeyCode() == 87) {
                     player.stopJumping();
+                    return;
+                }
+
+                if (e.getKeyCode() == 32) {
+                    player.stopShooting();
+                    return;
                 }
             }
         });

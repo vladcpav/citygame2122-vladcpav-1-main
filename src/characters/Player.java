@@ -1,6 +1,7 @@
 package characters;
 
 import city.cs.engine.*;
+import objects.Bullet;
 import org.jbox2d.common.Vec2;
 import objects.Floor;
 
@@ -11,6 +12,8 @@ public class Player extends DynamicBody {
     private static final BodyImage IDLE_IMAGE = new BodyImage("resources/sprites/player-idle.gif", 4);
     private static final BodyImage JUMP_IMAGE = new BodyImage("resources/sprites/player-jump.png", 4);
     private static final BodyImage RUN_IMAGE = new BodyImage("resources/sprites/player-run.gif", 4);
+    private static final BodyImage RUN_SHOOT_IMAGE = new BodyImage("resources/sprites/player-run-shoot.gif", 4);
+    private static final BodyImage STAND_SHOOT_IMAGE = new BodyImage("resources/sprites/player-stand-shoot.gif", 4);
 
     // States
 
@@ -21,6 +24,11 @@ public class Player extends DynamicBody {
     private boolean isGrounded = true;
     private boolean isJumping = false;
     private boolean isMoving = false;
+    private boolean isShooting = false;
+    private int baseAmmo = 150;
+    private int baseCooldown = 8;
+    private int ammo = 150;
+    private int cooldown = 8;
     private float hitpoint = 100;
 
     public Player(World world) {
@@ -66,6 +74,11 @@ public class Player extends DynamicBody {
         return this.hitpoint;
     }
 
+    public int getAmmo() {
+
+        return this.ammo;
+    }
+
     public void increaseHitpoint(int percentage) {
 
         this.hitpoint = Math.min(100, (float) (100 + percentage) / 100 * this.hitpoint);
@@ -108,6 +121,16 @@ public class Player extends DynamicBody {
         this.isJumping = false;
     }
 
+    public void shoot() {
+
+        this.isShooting = true;
+    }
+
+    public void stopShooting() {
+
+        this.isShooting = false;
+    }
+
     public void update() {
 
         Vec2 currentVelocity = this.getLinearVelocity();
@@ -126,9 +149,32 @@ public class Player extends DynamicBody {
             this.switchCurrentImage(Player.JUMP_IMAGE);
         }
         else {
-            this.switchCurrentImage(this.isMoving ? Player.RUN_IMAGE : Player.IDLE_IMAGE);
+            if (this.isMoving) {
+                this.switchCurrentImage(this.isShooting ? Player.RUN_SHOOT_IMAGE : Player.RUN_IMAGE);
+            }
+            else {
+                this.switchCurrentImage(this.isShooting ? Player.STAND_SHOOT_IMAGE : Player.IDLE_IMAGE);
+            }
         }
 
         this.setLinearVelocity(new Vec2(actualHSpeed, actualVSpeed));
+
+        if (this.isShooting) {
+            if (this.cooldown == 0) {
+                this.cooldown = this.baseCooldown;
+
+                this.ammo--;
+                if (this.ammo < 0) {
+                    this.ammo = 0;
+                }
+
+                Bullet bullet = new Bullet(this.getWorld());
+                // Vec2 currentPosition = this.getPosition();
+                bullet.setPosition(this.getPosition());
+            }
+            else {
+                this.cooldown--;
+            }
+        }
     }
 }
