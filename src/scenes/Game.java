@@ -9,9 +9,12 @@ import levels.Level;
 import levels.Level1;
 import levels.Level2;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Game {
@@ -97,6 +100,17 @@ public class Game {
                 }
             }
         });
+
+        // Music
+
+        SoundClip bgMusic;
+        try {
+            bgMusic = new SoundClip("resources/sounds/background-music.wav");
+            bgMusic.loop();
+        }
+        catch (UnsupportedAudioFileException | IOException | LineUnavailableException exception) {
+            System.out.println(exception);
+        }
 
         this.levels.get(0).start();
     }
