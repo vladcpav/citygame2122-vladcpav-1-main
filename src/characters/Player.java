@@ -25,10 +25,10 @@ public class Player extends DynamicBody {
     private boolean isJumping = false;
     private boolean isMoving = false;
     private boolean isShooting = false;
-    private int baseAmmo = 150;
-    private int baseCooldown = 8;
-    private int ammo = 150;
-    private int cooldown = 8;
+    private int baseAmmo = 50;
+    private int baseCooldown = 20;
+    private int ammo = this.baseAmmo;
+    private int cooldown = 0;
     private float hitpoint = 100;
 
     public Player(World world) {
@@ -77,6 +77,14 @@ public class Player extends DynamicBody {
     public int getAmmo() {
 
         return this.ammo;
+    }
+
+    public void replenishAmmo(int amount) {
+
+        this.ammo += amount;
+        if (this.ammo > this.baseAmmo) {
+            this.ammo = this.baseAmmo;
+        }
     }
 
     public void increaseHitpoint(int percentage) {
@@ -168,9 +176,9 @@ public class Player extends DynamicBody {
                     this.ammo = 0;
                 }
 
-                Bullet bullet = new Bullet(this.getWorld());
-                // Vec2 currentPosition = this.getPosition();
-                bullet.setPosition(this.getPosition());
+                Bullet bullet = new Bullet(this.getWorld(), this.direction);
+                Vec2 currentPosition = this.getPosition();
+                bullet.setPosition(new Vec2(currentPosition.x + 2 * this.direction, currentPosition.y));
             }
             else {
                 this.cooldown--;
