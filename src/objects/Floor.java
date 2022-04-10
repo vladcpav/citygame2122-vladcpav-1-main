@@ -11,6 +11,6 @@ public class Floor extends StaticBody {
 
         super(world, new BoxShape(width / 2, height / 2));
 
-        this.addImage(new BodyImage("resources/backgrounds/ground.png", height));
+        // this.addImage(new BodyImage("resources/backgrounds/ground.png", height));
     }
 }

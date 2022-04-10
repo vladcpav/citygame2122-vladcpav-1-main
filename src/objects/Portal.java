@@ -12,8 +12,8 @@ public class Portal extends StaticBody {
 
         super(level);
 
-        this.addImage(new BodyImage("resources/sprites/grunt-portal.png", 8));
-        this.sensor = new Sensor(this, new BoxShape(4, 4));
+        this.addImage(new BodyImage("resources/sprites/grunt-portal.png", 4));
+        this.sensor = new Sensor(this, new BoxShape(2, 2));
 
         this.sensor.addSensorListener(new SensorListener() {
 

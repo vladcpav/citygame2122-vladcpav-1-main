@@ -8,15 +8,13 @@ import org.jbox2d.common.Vec2;
 
 public class Enemy extends DynamicBody {
 
-    private int damage;
+    private int damage = 10;
 
-    Enemy(World world, String spritePath, int damage) {
+    public Enemy(World world) {
 
-        super(world, new BoxShape(4, 4));
+        super(world, new BoxShape(2, 2));
 
-        this.addImage(new BodyImage(spritePath, 8));
-
-        this.damage = damage;
+        this.addImage(new BodyImage("resources/sprites/enemy-idle.gif", 4));
     }
 
     public int getDamage() {
