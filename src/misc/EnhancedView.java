@@ -29,13 +29,5 @@ public class EnhancedView extends UserView {
         g.fillRect(50, 30, Math.round((this.player.getHitpoint() / 100) * 240), 30);
 
         g.setColor(Color.BLACK);
-        g.drawString("Stamina", 310, 20);
-
-        // Stamina bar
-
-        g.setColor(Color.RED);
-        g.fillRect(310, 30, 240, 30);
-        g.setColor(Color.YELLOW);
-        g.fillRect(310, 30, Math.round((this.player.getStamina() / 100) * 240), 30);
     }
 }

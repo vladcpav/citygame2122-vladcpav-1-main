@@ -1,15 +1,14 @@
 import characters.Enemy;
 import characters.Guard;
 import characters.Player;
-import characters.Bruce;
 
 import city.cs.engine.*;
 import city.cs.engine.Shape;
 import misc.EnhancedView;
 import org.jbox2d.common.Vec2;
+import platforms.Floor;
 import powerups.Health;
 import powerups.Powerup;
-import powerups.Health;
 
 import javax.swing.JFrame;
 import java.awt.event.KeyEvent;
@@ -17,12 +16,13 @@ import java.awt.event.KeyListener;
 
 public class Game {
 
-    public Game() {
+    public static void main(String[] args) {
 
         // Initialise world, camera, user view and frame
 
         World world = new World();
-        Player player = new Bruce(world, "resources/sprites/ak47.gif");
+
+        Player player = new Player(world);
 
         EnhancedView view = new EnhancedView(world, player, 1000, 500);
 
@@ -79,21 +79,13 @@ public class Game {
                 if (e.getKeyCode() == 87) {
                     player.jump();
                 }
-
-                if (e.getKeyCode() == 38) {
-                    player.elevateWeapon();
-                }
-
-                if (e.getKeyCode() == 40) {
-                    player.lowerWeapon();
-                }
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
 
                 if ((e.getKeyCode() == 68 && player.isMovingForward())
-                    || (e.getKeyCode() == 65 && player.isMovingBackwards())) {
+                        || (e.getKeyCode() == 65 && player.isMovingBackwards())) {
 
                     player.stopMoving();
                     return;
@@ -115,8 +107,7 @@ public class Game {
 
         // Ground
 
-        Shape shape = new BoxShape(30, 0.5f);
-        StaticBody ground = new StaticBody(world, shape);
+        Floor ground = new Floor(world);
         ground.setPosition(new Vec2(0f, -11.5F));
 
         // Enemies
@@ -129,10 +120,5 @@ public class Game {
 
         Powerup health = new Health(world);
         health.setPosition(new Vec2(-20, -10));
-    }
-
-    public static void main(String[] args) {
-
-        new Game();
     }
 }
