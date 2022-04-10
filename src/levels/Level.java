@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class Level extends World {
 
-    private Game game;
+    protected Game game;
     protected Portal portal;
     protected Player player;
     private StepListener listener;
@@ -25,10 +25,7 @@ public class Level extends World {
         try {
             this.backgroundImage = ImageIO.read(new File(backgroundPath));
         }
-        catch (IOException exception) {
-            System.out.println(exception);
-            this.backgroundImage = null;
-        }
+        catch (IOException exception) {}
 
         this.game = game;
         this.portal = new Portal(this);

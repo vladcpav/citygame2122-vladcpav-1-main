@@ -18,7 +18,7 @@ public class Level2 extends Level {
 
         // Ground
 
-        Floor ground = new Floor(this, 60, 1); ;
+        Floor ground = new Floor(this, 60, 80); ;
         ground.setPosition(new Vec2(2, -14.5f));
 
         // Enemies

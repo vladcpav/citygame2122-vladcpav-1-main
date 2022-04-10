@@ -16,7 +16,7 @@ public class Level1 extends Level {
 
         // Ground
 
-        Floor ground = new Floor(this, 60, 1);
+        Floor ground = new Floor(this, 60, 10);
         ground.setPosition(new Vec2(0f, -11.5F));
 
         // Power up

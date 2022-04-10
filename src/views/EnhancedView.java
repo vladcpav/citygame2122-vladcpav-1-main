@@ -33,15 +33,17 @@ public class EnhancedView extends UserView {
 
     protected void paintBackground(Graphics2D g) {
 
-        BufferedImage image = ((Level) this.getWorld()).getBackgroundImage();
-        if (image == null) {
+        Level level = (Level) this.getWorld();
+        BufferedImage bgImage = level.getBackgroundImage();
+
+        if (bgImage == null) {
             return;
         }
 
-        double sy = this.getHeight() / (float) image.getHeight();
-        double sx = this.getWidth() / (float) image.getWidth();
-        AffineTransform transform = AffineTransform.getScaleInstance(sx, sy);
+        double sy = this.getHeight() / (float) bgImage.getHeight();
+        double sx = this.getWidth() / (float) bgImage.getWidth();
 
-        g.drawImage(image, transform, null);
+        AffineTransform transform = AffineTransform.getScaleInstance(sx, sy);
+        g.drawImage(bgImage, transform, null);
     }
 }
