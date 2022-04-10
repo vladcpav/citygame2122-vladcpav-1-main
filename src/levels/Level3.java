@@ -10,9 +10,9 @@ import powerups.Powerup;
 
 import java.util.Random;
 
-public class Level1 extends Level {
+public class Level3 extends Level {
 
-    public Level1(Game game) {
+    public Level3(Game game) {
 
         super(game, "resources/backgrounds/background-sky.png");
 
@@ -29,17 +29,16 @@ public class Level1 extends Level {
 
         Random ran = new Random();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 8; i++) {
             Tree tree = new Tree(this);
             tree.setPosition(new Vec2(ran.nextFloat(80) - 20, 12));
         }
 
-
         // Enemies
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             Enemy enemy = new Enemy(this);
-            enemy.setPosition(new Vec2(ran.nextFloat(50) + 30, 8));
+            enemy.setPosition(new Vec2(ran.nextFloat(60) + 30, 8));
         }
 
         // Power up
@@ -50,5 +49,6 @@ public class Level1 extends Level {
         // Setup portal
 
         this.portal.setPosition(new Vec2(100, 8));
+
     }
 }

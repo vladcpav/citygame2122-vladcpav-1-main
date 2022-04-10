@@ -3,6 +3,7 @@ package scenes;
 import characters.Player;
 
 import city.cs.engine.*;
+import levels.Level3;
 import views.EnhancedView;
 import levels.Level;
 import levels.Level1;
@@ -11,18 +12,23 @@ import levels.Level2;
 import javax.swing.JFrame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 public class Game {
 
-    private Level currentLevel;
+    private ArrayList<Level> levels = new ArrayList<Level>();
+    private int level = 0;
     private EnhancedView view;
     private DebugViewer debug;
 
     public Game() {
 
-        this.currentLevel = new Level1(this);
-        this.view = new EnhancedView(this.currentLevel, 1000, 500);
-        this.debug = new DebugViewer(this.currentLevel, 500, 500);
+        this.levels.add(new Level1(this));
+        this.levels.add(new Level2(this));
+        this.levels.add(new Level3(this));
+
+        this.view = new EnhancedView(this.levels.get(0), 1000, 500);
+        this.debug = new DebugViewer(this.levels.get(0), 500, 500);
 
         JFrame frame = new JFrame("My game");
         frame.add(view);
@@ -45,7 +51,7 @@ public class Game {
             @Override
             public void keyPressed(KeyEvent e) {
 
-                Player player = Game.this.currentLevel.getPlayer();
+                Player player = Game.this.levels.get(Game.this.level).getPlayer();
 
                 if (e.getKeyCode() == 68) {
                     player.moveForward();
@@ -65,7 +71,7 @@ public class Game {
             @Override
             public void keyReleased(KeyEvent e) {
 
-                Player player = Game.this.currentLevel.getPlayer();
+                Player player = Game.this.levels.get(Game.this.level).getPlayer();
 
                 if ((e.getKeyCode() == 68 && player.isMovingForward())
                         || (e.getKeyCode() == 65 && player.isMovingBackwards())) {
@@ -80,24 +86,23 @@ public class Game {
             }
         });
 
-        this.currentLevel.start();
+        this.levels.get(0).start();
     }
 
     public void nextLevel() {
 
-        if (this.currentLevel instanceof Level2) {
+        if (this.level == this.levels.size() - 1) {
             System.out.println("Game over");
             System.exit(0);
             return;
         }
 
-        if (this.currentLevel instanceof Level1) {
-            this.currentLevel = new Level2(this);
-        }
+        this.level++;
+        Level currentLevel = this.levels.get(this.level);
 
-        this.view.setWorld(this.currentLevel);
-        this.debug.setWorld(this.currentLevel);
-        this.currentLevel.start();
+        this.view.setWorld(currentLevel);
+        this.debug.setWorld(currentLevel);
+        currentLevel.start();
     }
 
     public EnhancedView getView() {
