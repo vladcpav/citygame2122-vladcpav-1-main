@@ -2,8 +2,13 @@ package levels;
 
 import characters.Player;
 import city.cs.engine.*;
-import game.Game;
+import scenes.Game;
 import objects.Portal;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Level extends World {
 
@@ -11,10 +16,19 @@ public class Level extends World {
     protected Portal portal;
     protected Player player;
     private StepListener listener;
+    private BufferedImage backgroundImage;
 
-    Level(Game game) {
+    Level(Game game, String backgroundPath) {
 
         super();
+
+        try {
+            this.backgroundImage = ImageIO.read(new File(backgroundPath));
+        }
+        catch (IOException exception) {
+            System.out.println(exception);
+            this.backgroundImage = null;
+        }
 
         this.game = game;
         this.portal = new Portal(this);
@@ -42,6 +56,11 @@ public class Level extends World {
     public Player getPlayer() {
 
         return this.player;
+    }
+
+    public BufferedImage getBackgroundImage() {
+
+        return this.backgroundImage;
     }
 
     private class WorldStepListener implements StepListener {

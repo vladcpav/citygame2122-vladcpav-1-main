@@ -2,17 +2,19 @@ package levels;
 
 import characters.Enemy;
 import characters.Guard;
-import game.Game;
+import scenes.Game;
 import objects.Floor;
 import org.jbox2d.common.Vec2;
 import powerups.Health;
 import powerups.Powerup;
 
+import java.io.IOException;
+
 public class Level2 extends Level {
 
     public Level2(Game game) {
 
-        super(game);
+        super(game, "resources/backgrounds/background-cave.png");
 
         // Ground
 

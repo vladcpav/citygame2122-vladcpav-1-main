@@ -1,4 +1,4 @@
-import game.Game;
+import scenes.Game;
 
 public class Main {
 

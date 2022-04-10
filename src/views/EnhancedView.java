@@ -1,11 +1,11 @@
-package game;
+package views;
 
-import characters.Player;
 import city.cs.engine.UserView;
-import city.cs.engine.World;
 import levels.Level;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 public class EnhancedView extends UserView {
 
@@ -29,5 +29,19 @@ public class EnhancedView extends UserView {
         g.fillRect(50, 30, Math.round((hitpoint / 100) * 240), 30);
 
         g.setColor(Color.BLACK);
+    }
+
+    protected void paintBackground(Graphics2D g) {
+
+        BufferedImage image = ((Level) this.getWorld()).getBackgroundImage();
+        if (image == null) {
+            return;
+        }
+
+        double sy = this.getHeight() / (float) image.getHeight();
+        double sx = this.getWidth() / (float) image.getWidth();
+        AffineTransform transform = AffineTransform.getScaleInstance(sx, sy);
+
+        g.drawImage(image, transform, null);
     }
 }

@@ -1,8 +1,9 @@
-package game;
+package scenes;
 
 import characters.Player;
 
 import city.cs.engine.*;
+import views.EnhancedView;
 import levels.Level;
 import levels.Level1;
 import levels.Level2;
