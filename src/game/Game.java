@@ -1,14 +1,11 @@
-import characters.Enemy;
-import characters.Guard;
+package game;
+
 import characters.Player;
 
 import city.cs.engine.*;
-import city.cs.engine.Shape;
-import misc.EnhancedView;
-import org.jbox2d.common.Vec2;
-import platforms.Floor;
-import powerups.Health;
-import powerups.Powerup;
+import levels.Level;
+import levels.Level1;
+import levels.Level2;
 
 import javax.swing.JFrame;
 import java.awt.event.KeyEvent;
@@ -16,15 +13,15 @@ import java.awt.event.KeyListener;
 
 public class Game {
 
-    public static void main(String[] args) {
+    private Level currentLevel;
+    private EnhancedView view;
+    private DebugViewer debug;
 
-        // Initialise world, camera, user view and frame
+    public Game() {
 
-        World world = new World();
-
-        Player player = new Player(world);
-
-        EnhancedView view = new EnhancedView(world, player, 1000, 500);
+        this.currentLevel = new Level1(this);
+        this.view = new EnhancedView(this.currentLevel, 1000, 500);
+        this.debug = new DebugViewer(this.currentLevel, 500, 500);
 
         JFrame frame = new JFrame("My game");
         frame.add(view);
@@ -39,25 +36,6 @@ public class Game {
 
         // Listeners
 
-        world.addStepListener(new StepListener() {
-
-            @Override
-            public void preStep(StepEvent stepEvent) {
-            }
-
-            @Override
-            public void postStep(StepEvent stepEvent) {
-
-                // Move player
-
-                player.update();
-
-                // Follow player position
-
-                view.setCentre(player.getPosition());
-            }
-        });
-
         frame.addKeyListener(new KeyListener() {
 
             @Override
@@ -65,6 +43,8 @@ public class Game {
 
             @Override
             public void keyPressed(KeyEvent e) {
+
+                Player player = Game.this.currentLevel.getPlayer();
 
                 if (e.getKeyCode() == 68) {
                     player.moveForward();
@@ -84,6 +64,8 @@ public class Game {
             @Override
             public void keyReleased(KeyEvent e) {
 
+                Player player = Game.this.currentLevel.getPlayer();
+
                 if ((e.getKeyCode() == 68 && player.isMovingForward())
                         || (e.getKeyCode() == 65 && player.isMovingBackwards())) {
 
@@ -97,28 +79,28 @@ public class Game {
             }
         });
 
+        this.currentLevel.start();
+    }
 
-        // Debug frame
+    public void nextLevel() {
 
-        new DebugViewer(world, 500, 500);
+        if (this.currentLevel instanceof Level2) {
+            System.out.println("Game over");
+            System.exit(0);
+            return;
+        }
 
-        // Start
-        world.start();
+        if (this.currentLevel instanceof Level1) {
+            this.currentLevel = new Level2(this);
+        }
 
-        // Ground
+        this.view.setWorld(this.currentLevel);
+        this.debug.setWorld(this.currentLevel);
+        this.currentLevel.start();
+    }
 
-        Floor ground = new Floor(world);
-        ground.setPosition(new Vec2(0f, -11.5F));
+    public EnhancedView getView() {
 
-        // Enemies
-
-        Enemy guard = new Guard(world);
-        guard.setPosition(new Vec2(30, 0));
-        guard.setLinearVelocity(new Vec2(-10, 0));
-
-        // Power up
-
-        Powerup health = new Health(world);
-        health.setPosition(new Vec2(-20, -10));
+        return this.view;
     }
 }

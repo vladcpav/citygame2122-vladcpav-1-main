@@ -2,7 +2,7 @@ package characters;
 
 import city.cs.engine.*;
 import org.jbox2d.common.Vec2;
-import platforms.Floor;
+import objects.Floor;
 
 public class Player extends DynamicBody {
 
