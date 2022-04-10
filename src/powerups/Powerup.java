@@ -10,7 +10,7 @@ public class Powerup extends StaticBody {
 
         super(world);
 
-        this.addImage(new BodyImage(spritePath, 8));
-        this.sensor = new Sensor(this, new BoxShape(4, 4));
+        this.addImage(new BodyImage(spritePath, 2));
+        this.sensor = new Sensor(this, new BoxShape(1, 1));
     }
 }

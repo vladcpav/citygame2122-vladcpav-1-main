@@ -167,7 +167,9 @@ public class Player extends DynamicBody {
 
         this.setLinearVelocity(new Vec2(actualHSpeed, actualVSpeed));
 
-        if (this.isShooting) {
+        if (this.isShooting &&
+                this.ammo > 0) {
+
             if (this.cooldown == 0) {
                 this.cooldown = this.baseCooldown;
 

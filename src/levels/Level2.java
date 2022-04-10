@@ -2,10 +2,11 @@ package levels;
 
 import characters.Enemy;
 import objects.Tree;
+import powerups.Plant;
 import scenes.Game;
 import objects.Floor;
 import org.jbox2d.common.Vec2;
-import powerups.Health;
+import powerups.Ammo;
 import powerups.Powerup;
 
 import java.util.Random;
@@ -43,8 +44,19 @@ public class Level2 extends Level {
 
         // Power up
 
-        Powerup health = new Health(this);
-        health.setPosition(new Vec2(20, 8));
+        for (int i = 0; i < 3; i++) {
+            int powerUpId = ran.nextInt(2);
+
+            Powerup powerup;
+            if (powerUpId == 0) {
+                powerup = new Ammo(this);
+            }
+            else {
+                powerup = new Plant(this);
+            }
+
+            powerup.setPosition(new Vec2(ran.nextFloat(40) + 40, 8));
+        }
 
         // Setup portal
 
