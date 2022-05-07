@@ -2,32 +2,19 @@ package game.levels;
 
 import game.characters.Player;
 import city.cs.engine.*;
-import ui.scenes.Game;
+import game.events.LevelAdapter;
 import game.objects.Portal;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class Level extends World {
 
-    protected Game game;
     protected Portal portal;
     protected Player player;
+
+    private LevelAdapter adapter;
     private StepListener listener;
-    private BufferedImage backgroundImage;
 
-    Level(Game game, String backgroundPath) {
+    Level() {
 
-        super();
-
-        try {
-            this.backgroundImage = ImageIO.read(new File(backgroundPath));
-        }
-        catch (IOException exception) {}
-
-        this.game = game;
         this.portal = new Portal(this);
         this.player = new Player(this);
         this.listener = new Level.WorldStepListener();
@@ -35,9 +22,23 @@ public class Level extends World {
         this.addStepListener(this.listener);
     }
 
+    public void setLevelListener(LevelAdapter adapter) {
+
+        this.adapter = adapter;
+    }
+
     public void finish() {
 
+        if (this.adapter != null) {
+            this.adapter.finished();
+        }
+    }
+
+    public void cleanup() {
+
+        this.stop();
         this.removeStepListener(this.listener);
+        this.adapter = null;
 
         for (StaticBody body: this.getStaticBodies()) {
             body.destroy();
@@ -46,18 +47,11 @@ public class Level extends World {
         for (DynamicBody body: this.getDynamicBodies()) {
             body.destroy();
         }
-
-        this.game.nextLevel();
     }
 
     public Player getPlayer() {
 
         return this.player;
-    }
-
-    public BufferedImage getBackgroundImage() {
-
-        return this.backgroundImage;
     }
 
     private class WorldStepListener implements StepListener {
@@ -73,9 +67,9 @@ public class Level extends World {
 
             Level.this.player.update();
 
-            // Follow player position
-
-            Level.this.game.getView().setCentre(player.getPosition());
+            if (Level.this.adapter != null) {
+                Level.this.adapter.stepped();
+            }
         }
     }
 }

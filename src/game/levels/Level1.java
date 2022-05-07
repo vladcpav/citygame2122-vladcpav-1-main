@@ -3,7 +3,6 @@ package game.levels;
 import game.characters.Enemy;
 import game.objects.Tree;
 import game.powerups.Plant;
-import ui.scenes.Game;
 import game.objects.Floor;
 import org.jbox2d.common.Vec2;
 import game.powerups.Ammo;
@@ -13,9 +12,7 @@ import java.util.Random;
 
 public class Level1 extends Level {
 
-    public Level1(Game game) {
-
-        super(game, "resources/backgrounds/background-sky.png");
+    public Level1() {
 
         // PLayer positioning
 

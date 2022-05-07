@@ -22,7 +22,7 @@ public class Portal extends StaticBody {
 
                 Body otherBody = e.getContactBody();
                 if (otherBody instanceof Player) {
-                    ((Level) Portal.this.getWorld()).finish();
+                    level.finish();
                 }
             }
 
