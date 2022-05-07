@@ -1,9 +1,10 @@
-import scenes.Game;
+import ui.Application;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        new Game();
+        Application app = new Application();
+        app.start();
     }
 }

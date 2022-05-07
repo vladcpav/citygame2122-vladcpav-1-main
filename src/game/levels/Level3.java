@@ -1,21 +1,21 @@
-package levels;
+package game.levels;
 
-import characters.Enemy;
-import objects.Tree;
-import powerups.Plant;
-import scenes.Game;
-import objects.Floor;
+import game.characters.Enemy;
+import game.objects.Tree;
+import game.powerups.Plant;
+import ui.scenes.Game;
+import game.objects.Floor;
 import org.jbox2d.common.Vec2;
-import powerups.Ammo;
-import powerups.Powerup;
+import game.powerups.Ammo;
+import game.powerups.Powerup;
 
 import java.util.Random;
 
-public class Level2 extends Level {
+public class Level3 extends Level {
 
-    public Level2(Game game) {
+    public Level3(Game game) {
 
-        super(game, "resources/backgrounds/background-cave.png");
+        super(game, "resources/backgrounds/background-sky.png");
 
         // PLayer positioning
 
@@ -30,14 +30,14 @@ public class Level2 extends Level {
 
         Random ran = new Random();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 8; i++) {
             Tree tree = new Tree(this);
             tree.setPosition(new Vec2(ran.nextFloat(80) - 20, 12));
         }
 
         // Enemies
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 10; i++) {
             Enemy enemy = new Enemy(this);
             enemy.setPosition(new Vec2(ran.nextFloat(60) + 30, 8));
         }
@@ -64,4 +64,3 @@ public class Level2 extends Level {
 
     }
 }
-

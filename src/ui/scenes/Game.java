@@ -1,52 +1,42 @@
-package scenes;
+package ui.scenes;
 
-import characters.Player;
+import game.characters.Player;
 
 import city.cs.engine.*;
-import levels.Level3;
-import views.EnhancedView;
-import levels.Level;
-import levels.Level1;
-import levels.Level2;
+import game.levels.Level3;
+import ui.Application;
+import game.levels.Level;
+import game.levels.Level1;
+import game.levels.Level2;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Game {
+public class Game extends BaseScene {
 
-    private ArrayList<Level> levels = new ArrayList<Level>();
-    private int level = 0;
-    private EnhancedView view;
+    private ArrayList<Level> levels = new ArrayList();
+    private int level = -1;
+    private UserView view;
     private DebugViewer debug;
 
-    public Game() {
+    @Override
+    protected void scaffold(JPanel panel, Application application) {
 
         this.levels.add(new Level1(this));
         this.levels.add(new Level2(this));
         this.levels.add(new Level3(this));
 
-        this.view = new EnhancedView(this.levels.get(0), 1000, 500);
+        this.view = new UserView(this.levels.get(0), application.getWidth(), application.getHeight());
         this.debug = new DebugViewer(this.levels.get(0), 500, 500);
-
-        JFrame frame = new JFrame("My game");
-        frame.add(view);
-
-        // Frame settings
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);               // enable the frame to quit the application when the x button is pressed
-        frame.setLocationByPlatform(true);
-        frame.setResizable(false);
-        frame.pack();                                                       // size the frame to fit the world view
-        frame.setVisible(true);
 
         // Listeners
 
-        frame.addKeyListener(new KeyListener() {
+        application.addKeyListener(new KeyListener() {
 
             @Override
             public void keyTyped(KeyEvent e) {}
@@ -112,7 +102,9 @@ public class Game {
             System.out.println(exception);
         }
 
-        this.levels.get(0).start();
+        panel.add(this.view);
+        this.view.setOpaque(false);
+        this.nextLevel();
     }
 
     public void nextLevel() {
@@ -127,11 +119,12 @@ public class Game {
         Level currentLevel = this.levels.get(this.level);
 
         this.view.setWorld(currentLevel);
+        this.setBackgroundImage(currentLevel.getBackgroundImage());
         this.debug.setWorld(currentLevel);
         currentLevel.start();
     }
 
-    public EnhancedView getView() {
+    public UserView getView() {
 
         return this.view;
     }

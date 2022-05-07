@@ -1,8 +1,8 @@
-package objects;
+package game.objects;
 
-import characters.Player;
+import game.characters.Player;
 import city.cs.engine.*;
-import levels.Level;
+import game.levels.Level;
 
 public class Portal extends StaticBody {
 

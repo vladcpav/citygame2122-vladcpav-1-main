@@ -1,6 +1,6 @@
-package powerups;
+package game.powerups;
 
-import characters.Player;
+import game.characters.Player;
 import city.cs.engine.*;
 
 import java.util.Random;

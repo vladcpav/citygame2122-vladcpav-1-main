@@ -1,9 +1,9 @@
-package levels;
+package game.levels;
 
-import characters.Player;
+import game.characters.Player;
 import city.cs.engine.*;
-import scenes.Game;
-import objects.Portal;
+import ui.scenes.Game;
+import game.objects.Portal;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

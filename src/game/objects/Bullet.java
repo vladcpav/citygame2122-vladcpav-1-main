@@ -1,9 +1,7 @@
-package objects;
+package game.objects;
 
-import characters.Enemy;
-import characters.Player;
+import game.characters.Enemy;
 import city.cs.engine.*;
-import levels.Level;
 import org.jbox2d.common.Vec2;
 
 public class Bullet extends DynamicBody {
