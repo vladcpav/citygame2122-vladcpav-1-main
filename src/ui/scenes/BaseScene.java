@@ -9,11 +9,23 @@ import java.awt.image.BufferedImage;
 public abstract class BaseScene {
 
     private BufferedImage backgroundImage;
-    private JPanel panel;
 
-    public JPanel build(Application application) {
+    protected Application application;
 
-        this.panel = new JPanel() {
+    protected BaseScene(Application application, BufferedImage backgroundImage) {
+
+        this.application = application;
+        this.backgroundImage = backgroundImage;
+    }
+
+    protected BaseScene(Application application) {
+
+        this.application = application;
+    }
+
+    public JPanel build() {
+
+        JPanel panel = new JPanel() {
 
             @Override
             protected void paintComponent(Graphics g) {
@@ -26,22 +38,22 @@ public abstract class BaseScene {
                     return;
                 }
 
+                Application application = BaseScene.this.application;
                 g.drawImage(image, 0, 0, application.getWidth(), application.getHeight(), null);
             }
         };
 
-        this.scaffold(this.panel, application);
+        this.scaffold(panel);
 
-        return this.panel;
+        return panel;
     }
 
-    protected void setBackgroundImage(BufferedImage image) {
+    public void setBackgroundImage(BufferedImage image) {
 
         this.backgroundImage = image;
-        this.panel.repaint();
     }
 
     public void cleanup() {}
 
-    protected abstract void scaffold(JPanel panel, Application application);
+    protected abstract void scaffold(JPanel panel);
 }

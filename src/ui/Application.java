@@ -2,11 +2,17 @@ package ui;
 
 import ui.scenes.BaseScene;
 import ui.scenes.Menu;
+import ui.scenes.levels.BaseLevel;
+import ui.scenes.levels.Level1;
+import ui.scenes.levels.Level2;
 import utilities.resources.Fonts;
 
 import javax.swing.*;
 
 public class Application extends JFrame {
+
+    private int level = -1;
+    private BaseLevel[] levels = new BaseLevel[]{new Level1(this), new Level2(this)};
 
     private BaseScene currentScene;
 
@@ -27,7 +33,7 @@ public class Application extends JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setTitle("Commando");
         this.setResizable(false);
-        this.loadScene(new Menu());
+        this.loadScene(new Menu(this));
     }
 
     public void close() {
@@ -36,18 +42,29 @@ public class Application extends JFrame {
         System.exit(0);
     }
 
+    public void loadNextLevel() {
+
+        this.level++;
+
+        if (this.level > this.levels.length - 1) {
+            System.out.println("Game over!");
+            this.close();
+            return;
+        }
+
+        this.loadScene(this.levels[this.level]);
+    }
+
     public void loadScene(BaseScene scene) {
 
-        String name = scene.getClass().getName();
-
         if (this.currentScene != null) {
-            System.out.println("Cleaning up old scene: " + name);
+            System.out.println("Cleaning up old scene: " + this.currentScene.getClass().getName());
             this.currentScene.cleanup();
         }
 
-        System.out.println("Scaffolding new scene: " + name);
+        System.out.println("Scaffolding new scene: " + scene.getClass().getName());
         this.currentScene = scene;
-        this.setContentPane(scene.build(this));
+        this.setContentPane(scene.build());
         this.revalidate();
     }
 }

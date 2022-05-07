@@ -11,19 +11,23 @@ import java.awt.*;
 
 public class Menu extends BaseScene {
 
-    @Override
-    protected void scaffold(JPanel panel, Application application) {
+    public Menu(Application application) {
 
-        this.setBackgroundImage(Backgrounds.load("menu.png"));
+        super(application, Backgrounds.load("menu.png"));
+    }
+
+    @Override
+    protected void scaffold(JPanel panel) {
 
         Button startButton = new Button("Start", (e) -> {
 
-            application.loadScene(new Game());
+            this.application.loadNextLevel();
+            this.application.requestFocusInWindow();
         });
 
         Button exitButton = new Button("Quit", (e) -> {
 
-            application.close();
+            this.application.close();
         });
 
         panel.setLayout(new BorderLayout());
