@@ -1,6 +1,7 @@
 package game.characters;
 
 import city.cs.engine.*;
+import events.GameOverListener;
 import game.objects.PlayerBullet;
 import org.jbox2d.common.Vec2;
 import game.objects.Ground;
@@ -20,6 +21,7 @@ public class Player extends Character {
     private float baseVSpeed = 70;
     private float baseHSpeed = 40;
     private float baseDamage = 20;
+    private float maxHitpoint = 100;
     private boolean isGrounded = true;
     private boolean isJumping = false;
     private boolean isMoving = false;
@@ -29,6 +31,8 @@ public class Player extends Character {
     private int ammo = this.baseAmmo;
     private int cooldown = 0;
     private float hitpoint = 100;
+
+    private GameOverListener gameOverListener;
 
     public Player(World world) {
 
@@ -53,21 +57,20 @@ public class Player extends Character {
         return this.hitpoint;
     }
 
+    public float getMaxHitpoint() {
+
+        return this.maxHitpoint;
+    }
+
     public int getAmmo() {
 
         return this.ammo;
-    }
-
-    public void buff() {
-
-
     }
 
     @Override
     public void destroy() {
 
         super.destroy();
-
     }
 
     public void replenishAmmo(int amount) {
@@ -86,6 +89,17 @@ public class Player extends Character {
     public void hit(float damage) {
 
         this.hitpoint -= damage;
+
+        if (this.hitpoint <= 0) {
+            if (this.gameOverListener != null) {
+                this.gameOverListener.gameEnded();
+            }
+        }
+    }
+
+    public void setGameOverListener(GameOverListener listener) {
+
+        this.gameOverListener = listener;
     }
 
     public void moveForward() {

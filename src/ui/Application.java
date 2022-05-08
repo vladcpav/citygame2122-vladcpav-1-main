@@ -1,6 +1,7 @@
 package ui;
 
 import ui.scenes.BaseScene;
+import ui.scenes.GameOver;
 import ui.scenes.Menu;
 import ui.scenes.levels.BaseLevel;
 import ui.scenes.levels.Level1;
@@ -47,12 +48,17 @@ public class Application extends JFrame {
         this.level++;
 
         if (this.level > this.levels.length - 1) {
-            System.out.println("Game over!");
-            this.close();
+            this.loadGameOver();
             return;
         }
 
         this.loadScene(this.levels[this.level]);
+    }
+
+    public void loadGameOver() {
+
+        this.level = -1;
+        this.loadScene(new GameOver(this));
     }
 
     public void loadScene(BaseScene scene) {

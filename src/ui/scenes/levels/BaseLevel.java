@@ -4,6 +4,7 @@ import game.characters.Enemy;
 import game.characters.Player;
 
 import city.cs.engine.*;
+import game.objects.Shelter;
 import org.jbox2d.common.Vec2;
 import ui.Application;
 import ui.scenes.BaseScene;
@@ -17,6 +18,7 @@ public abstract class BaseLevel extends BaseScene {
 
     protected Player player;
     protected World world;
+    protected Shelter shelter;
     private UserView view;
     private KeyListener keyListener;
     private StepListener stepListener;
@@ -45,6 +47,8 @@ public abstract class BaseLevel extends BaseScene {
 
         this.application.removeKeyListener(this.keyListener);
 
+        this.remove(this.view);
+
         // Nullify fields
 
         this.world = null;
@@ -62,6 +66,7 @@ public abstract class BaseLevel extends BaseScene {
 
         this.world = new World();
         this.player = new Player(this.world);
+        this.shelter = new Shelter(this.world);
         this.view = new UserView(this.world, this.application.getWidth(), this.application.getHeight());
         this.view.setOpaque(false);
         this.enemies = new ArrayList();
@@ -72,6 +77,16 @@ public abstract class BaseLevel extends BaseScene {
         this.build();
 
         // Listeners
+
+        this.shelter.setShelterReachedListener(() -> {
+
+            this.application.loadNextLevel();
+        });
+
+        this.player.setGameOverListener(() -> {
+
+            this.application.loadGameOver();
+        });
 
         this.keyListener = new KeyListener() {
 
@@ -149,6 +164,8 @@ public abstract class BaseLevel extends BaseScene {
 
         this.world.addStepListener(this.stepListener);
 
+        // Start
+
         this.add(this.view);
         this.world.start();
     }
@@ -163,7 +180,16 @@ public abstract class BaseLevel extends BaseScene {
         });
 
         return enemy;
-    }
+   }
+
+   protected void paintStats(Graphics g) {
+
+       g.setColor(Color.RED);
+       g.fillRect(150, 50, 500, 60);
+
+       g.setColor(Color.GREEN);
+       g.fillRect(150, 50, Math.round(this.player.getHitpoint() / this.player.getMaxHitpoint() * 500), 60);
+   }
 
     protected abstract void build();
 }

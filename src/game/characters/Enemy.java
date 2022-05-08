@@ -2,6 +2,7 @@ package game.characters;
 
 import city.cs.engine.*;
 import game.objects.EnemyBullet;
+import game.objects.Ground;
 import org.jbox2d.common.Vec2;
 
 import java.awt.*;
@@ -19,6 +20,8 @@ public class Enemy extends Character {
     private float baseHSpeed = 20;
     private int baseCooldown = 15;
     private int maxAllowedRounds = 5;
+    private int baseBodyDamage = 15;
+    private int baseBulletDamage = 5;
     private int roundsFired = 0;
     private float hitpoint = 100;
     private boolean aware = false;
@@ -27,6 +30,7 @@ public class Enemy extends Character {
     private Integer patrolDistance;
     private Vec2 startPosition;
     private int cooldown = 0;
+
 
     private Timer timer;
 
@@ -44,6 +48,15 @@ public class Enemy extends Character {
         this.direction = -1;
 
         this.switchCurrentImage(Enemy.IDLE_IMAGE);
+
+        this.addCollisionListener((e) -> {
+
+            Body otherBody = e.getOtherBody();
+
+            if (otherBody instanceof Player) {
+                ((Player) otherBody).hit(this.baseBodyDamage);
+            }
+        });
     }
 
     public void hit(float damage, int direction) {
@@ -130,12 +143,13 @@ public class Enemy extends Character {
                     this.roundsFired = 0;
                     this.offensive = false;
                     this.aware = false;
+                    this.startPosition = this.getPosition();
                 }
                 else {
                     this.cooldown = this.baseCooldown;
                 }
 
-                EnemyBullet enemyBullet = new EnemyBullet(this.getWorld(), this.direction, 10);
+                EnemyBullet enemyBullet = new EnemyBullet(this.getWorld(), this.direction, this.baseBulletDamage);
                 Vec2 currentPosition = this.getPosition();
                 enemyBullet.setPosition(new Vec2(currentPosition.x + 7 * this.direction, currentPosition.y));
             }
@@ -143,12 +157,10 @@ public class Enemy extends Character {
             return;
         }
 
-        if (this.aware) {
-            this.switchCurrentImage(Enemy.IDLE_IMAGE);
-            return;
-        }
+        if (this.aware
+            || this.patrolDistance == null) {
 
-        if (this.patrolDistance == null) {
+            this.switchCurrentImage(Enemy.IDLE_IMAGE);
             return;
         }
 

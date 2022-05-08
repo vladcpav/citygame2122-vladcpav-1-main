@@ -26,23 +26,34 @@ public class Level1 extends BaseLevel {
     protected void build() {
 
         this.player.setPosition(new Vec2(-8, 0));
+        this.shelter.setPosition(new Vec2(250, 22));
 
         World world = this.world;
 
-        new SkullPost(world).setPosition(new Vec2(30, -18));
-
         this.addEnemy(new Enemy(world, 40)).setPosition(new Vec2(80, -17));
-        this.addEnemy(new Enemy(world)).setPosition(new Vec2(100, -17));
+        this.addEnemy(new Enemy(world)).setPosition(new Vec2(100, 6));
+        this.addEnemy(new Enemy(world, 30)).setPosition(new Vec2(160, 30));
+        this.addEnemy(new Enemy(world, 20)).setPosition(new Vec2(190, 30));
+        this.addEnemy(new Enemy(world, 20)).setPosition(new Vec2(240, 30));
+
+        new SkullPost(world).setPosition(new Vec2(30, -18));
+        new SkullPost(world).setPosition(new Vec2(92, 6));
 
         new Ground(world, 100, 20).setPosition(new Vec2(-12, -30));
         new Ground(world, 50, 100).setPosition(new Vec2(-35, -30));
 
         new Ground(world, 100, 40).setPosition(new Vec2(80, -30));
-        new Ground(world, 60, 20).setPosition(new Vec2(80, -20));
+
+        new Ground(world, 30, 4).setPosition(new Vec2(105, 2));
+        new Ground(world, 160, 90).setPosition(new Vec2(190, -30));
 
         Tree.generate(world).setPosition(new Vec2(4,-13));
         Tree.generate(world).setPosition(new Vec2(12,-13));
         Tree.generate(world).setPosition(new Vec2(60,-3));
+        Tree.generate(world).setPosition(new Vec2(70,-3));
+        Tree.generate(world).setPosition(new Vec2(130, 22));
+        Tree.generate(world).setPosition(new Vec2(170, 22));
+        Tree.generate(world).setPosition(new Vec2(220, 22));
 
         for (int i = 0; i < 5; i++) {
             this.clouds[i] = new Cloud();
@@ -64,6 +75,8 @@ public class Level1 extends BaseLevel {
 
         g.drawImage(image, 300, this.getHeight() - targetHeight - 200, targetWidth, targetHeight, null);
         g.drawImage(image, 600 + targetWidth, this.getHeight() - targetHeight - 300, targetWidth, targetHeight, null);
+
+        this.paintStats(g);
     }
 
     private void drawClouds(Graphics g) {

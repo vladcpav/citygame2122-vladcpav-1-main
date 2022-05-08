@@ -11,7 +11,7 @@ public class Ground extends StaticBody {
 
         super(world, new BoxShape(width / 2, height / 2));
 
-        Random ran = new Random();
+        Random rng = new Random();
 
         int xOrigin = -width / 2 + 2;
         int yOrigin = height / 2 - 2;
@@ -21,13 +21,13 @@ public class Ground extends StaticBody {
                 String fileName;
 
                 if (i == 0) {
-                    fileName = j == 0 ? "ground-0.png" : "ground-" + (ran.nextInt(5) + 6) + ".png";
+                    fileName = j == 0 ? "ground-0.png" : "ground-" + (rng.nextInt(5) + 6) + ".png";
                 }
                 else if (i == width / 4 - 1) {
-                    fileName = j == 0 ? "ground-5.png" : "ground-" + (ran.nextInt(5) + 7) + ".png";
+                    fileName = j == 0 ? "ground-5.png" : "ground-" + (rng.nextInt(5) + 7) + ".png";
                 }
                 else {
-                    fileName = "ground-" + (ran.nextInt(4) + (j == 0 ? 1 : 7)) + ".png";
+                    fileName = "ground-" + (rng.nextInt(4) + (j == 0 ? 1 : 7)) + ".png";
                 }
 
                 AttachedImage dirtImage = this.addImage(new BodyImage("resources/tiles/" + fileName, 4));
