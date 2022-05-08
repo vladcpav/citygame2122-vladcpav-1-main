@@ -7,13 +7,14 @@ import ui.scenes.levels.BaseLevel;
 import ui.scenes.levels.Level1;
 import ui.scenes.levels.Level2;
 import utilities.resources.Fonts;
+import utilities.resources.Sounds;
 
 import javax.swing.*;
 
 public class Application extends JFrame {
 
     private int level = -1;
-    private BaseLevel[] levels = new BaseLevel[]{new Level1(this), new Level2(this)};
+    private BaseLevel[] levels = new BaseLevel[]{new Level2(this), new Level1(this)};
 
     private BaseScene currentScene;
 
@@ -35,6 +36,10 @@ public class Application extends JFrame {
         this.setTitle("Commando");
         this.setResizable(false);
         this.loadScene(new Menu(this));
+
+        if (Sounds.BACKGROUND_MUSIC != null) {
+            Sounds.BACKGROUND_MUSIC.loop();
+        }
     }
 
     public void close() {

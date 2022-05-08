@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class Ground extends StaticBody {
 
-    public Ground(World world, int width, int height) {
+    Ground(World world, int width, int height, String[] surfacePaths, String[] leftEdgePaths, String[] rightEdgePaths, String[] dirtPaths, String[] leftCornerPaths, String[] rightCornerPaths) {
 
         super(world, new BoxShape(width / 2, height / 2));
 
@@ -21,13 +21,13 @@ public class Ground extends StaticBody {
                 String fileName;
 
                 if (i == 0) {
-                    fileName = j == 0 ? "ground-0.png" : "ground-" + (rng.nextInt(5) + 6) + ".png";
+                    fileName = j == 0 ? leftCornerPaths[rng.nextInt(leftCornerPaths.length)] : leftEdgePaths[rng.nextInt(leftEdgePaths.length)];
                 }
                 else if (i == width / 4 - 1) {
-                    fileName = j == 0 ? "ground-5.png" : "ground-" + (rng.nextInt(5) + 7) + ".png";
+                    fileName = j == 0 ? rightCornerPaths[rng.nextInt(rightCornerPaths.length)] : rightEdgePaths[rng.nextInt(rightEdgePaths.length)];
                 }
                 else {
-                    fileName = "ground-" + (rng.nextInt(4) + (j == 0 ? 1 : 7)) + ".png";
+                    fileName = j == 0 ? surfacePaths[rng.nextInt(surfacePaths.length)] : dirtPaths[rng.nextInt(dirtPaths.length)];
                 }
 
                 AttachedImage dirtImage = this.addImage(new BodyImage("resources/tiles/" + fileName, 4));

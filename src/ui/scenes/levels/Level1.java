@@ -2,9 +2,11 @@ package ui.scenes.levels;
 
 import city.cs.engine.World;
 import game.characters.Enemy;
+import game.objects.GrassGround;
+import game.powerups.Ammo;
+import game.powerups.Plant;
 import game.props.SkullPost;
 import game.props.Tree;
-import game.objects.Ground;
 import org.jbox2d.common.Vec2;
 import ui.Application;
 import utilities.resources.Images;
@@ -36,16 +38,19 @@ public class Level1 extends BaseLevel {
         this.addEnemy(new Enemy(world, 20)).setPosition(new Vec2(190, 30));
         this.addEnemy(new Enemy(world, 20)).setPosition(new Vec2(240, 30));
 
+        new Plant(world).setPosition(new Vec2(170, 16));
+        new Ammo(world).setPosition(new Vec2(100, -8));
+
         new SkullPost(world).setPosition(new Vec2(30, -18));
         new SkullPost(world).setPosition(new Vec2(92, 6));
 
-        new Ground(world, 100, 20).setPosition(new Vec2(-12, -30));
-        new Ground(world, 50, 100).setPosition(new Vec2(-35, -30));
+        new GrassGround(world, 100, 20).setPosition(new Vec2(-12, -30));
+        new GrassGround(world, 50, 100).setPosition(new Vec2(-35, -30));
 
-        new Ground(world, 100, 40).setPosition(new Vec2(80, -30));
+        new GrassGround(world, 100, 40).setPosition(new Vec2(80, -30));
 
-        new Ground(world, 30, 4).setPosition(new Vec2(105, 2));
-        new Ground(world, 160, 90).setPosition(new Vec2(190, -30));
+        new GrassGround(world, 30, 4).setPosition(new Vec2(105, 2));
+        new GrassGround(world, 160, 90).setPosition(new Vec2(190, -30));
 
         Tree.generate(world).setPosition(new Vec2(4,-13));
         Tree.generate(world).setPosition(new Vec2(12,-13));
