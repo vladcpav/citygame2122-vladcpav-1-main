@@ -1,45 +1,27 @@
 package game.objects;
 
-import game.characters.Enemy;
 import city.cs.engine.*;
 import org.jbox2d.common.Vec2;
 
 public class Bullet extends DynamicBody {
 
-    private Sensor sensor;
-    private float baseHSpeed = 80;
+    protected float baseHSpeed = 80;
 
-    public Bullet(World world, int direction) {
+    protected Sensor sensor;
 
-        super(world, new CircleShape(1));
+    public Bullet(World world, int direction, float damage, String spritePath) {
 
-        AttachedImage image = this.addImage(new BodyImage("resources/sprites/player-bullet.gif", 2));
-        this.setLinearVelocity(new Vec2(this.baseHSpeed  * direction, 0));
+        super(world);
 
-        this.sensor = new Sensor(this, new CircleShape(1));
-        this.setGravityScale(0);
+        AttachedImage image = this.addImage(new BodyImage(spritePath, 2));
 
         if (direction == -1) {
             image.flipHorizontal();
         }
 
-        this.sensor.addSensorListener(new SensorListener() {
+        this.setLinearVelocity(new Vec2(this.baseHSpeed  * direction, 0));
+        this.setGravityScale(0);
 
-            @Override
-            public void beginContact(SensorEvent e) {
-
-                Body otherBody = e.getContactBody();
-                if (otherBody instanceof Enemy) {
-                    ((Enemy) otherBody).kill();
-                }
-
-                if (otherBody instanceof Enemy || otherBody instanceof Ground) {
-                    Bullet.this.destroy();
-                }
-            }
-
-            @Override
-            public void endContact(SensorEvent e) {}
-        });
+        this.sensor = new Sensor(this, new CircleShape(1));
     }
 }

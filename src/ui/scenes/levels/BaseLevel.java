@@ -1,5 +1,6 @@
 package ui.scenes.levels;
 
+import game.characters.Enemy;
 import game.characters.Player;
 
 import city.cs.engine.*;
@@ -7,8 +8,10 @@ import org.jbox2d.common.Vec2;
 import ui.Application;
 import ui.scenes.BaseScene;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 public abstract class BaseLevel extends BaseScene {
 
@@ -17,6 +20,7 @@ public abstract class BaseLevel extends BaseScene {
     private UserView view;
     private KeyListener keyListener;
     private StepListener stepListener;
+    protected ArrayList<Enemy> enemies;
 
     BaseLevel(Application application) {
 
@@ -48,6 +52,7 @@ public abstract class BaseLevel extends BaseScene {
         this.view = null;
         this.keyListener = null;
         this.stepListener = null;
+        this.enemies = null;
     }
 
     @Override
@@ -59,6 +64,7 @@ public abstract class BaseLevel extends BaseScene {
         this.player = new Player(this.world);
         this.view = new UserView(this.world, this.application.getWidth(), this.application.getHeight());
         this.view.setOpaque(false);
+        this.enemies = new ArrayList();
         new DebugViewer(this.world, 500, 500);
 
         // Build world
@@ -104,7 +110,7 @@ public abstract class BaseLevel extends BaseScene {
                 Player player = BaseLevel.this.player;
 
                 if ((e.getKeyCode() == 68 && player.isMovingForward())
-                        || (e.getKeyCode() == 65 && player.isMovingBackwards())) {
+                    || (e.getKeyCode() == 65 && player.isMovingBackwards())) {
 
                     player.stopMoving();
                     return;
@@ -134,6 +140,10 @@ public abstract class BaseLevel extends BaseScene {
 
                 BaseLevel.this.player.update();
                 BaseLevel.this.view.setCentre(new Vec2(BaseLevel.this.player.getPosition().x + 16, BaseLevel.this.view.getCentre().y));
+
+                for (Enemy enemy: BaseLevel.this.enemies) {
+                    enemy.update();
+                }
             }
         };
 
@@ -141,6 +151,18 @@ public abstract class BaseLevel extends BaseScene {
 
         this.add(this.view);
         this.world.start();
+    }
+
+    protected Enemy addEnemy(Enemy enemy) {
+
+        this.enemies.add(enemy);
+
+        enemy.addDestructionListener((e) -> {
+
+            this.enemies.remove(enemy);
+        });
+
+        return enemy;
     }
 
     protected abstract void build();

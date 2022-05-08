@@ -29,32 +29,20 @@ public class Level1 extends BaseLevel {
 
         World world = this.world;
 
-        SkullPost skullPost = new SkullPost(world);
-        skullPost.setPosition(new Vec2(30, -18));
+        new SkullPost(world).setPosition(new Vec2(30, -18));
 
-        Ground ground = new Ground(world, 100, 20);
-        ground.setPosition(new Vec2(-12, -30));
+        this.addEnemy(new Enemy(world, 40)).setPosition(new Vec2(80, -17));
+        this.addEnemy(new Enemy(world)).setPosition(new Vec2(100, -17));
 
-        Ground boundary = new Ground(world, 50, 100);
-        boundary.setPosition(new Vec2(-35, -30));
+        new Ground(world, 100, 20).setPosition(new Vec2(-12, -30));
+        new Ground(world, 50, 100).setPosition(new Vec2(-35, -30));
 
-        Ground ground2 = new Ground(world, 100, 40);
-        ground2.setPosition(new Vec2(80, -30));
+        new Ground(world, 100, 40).setPosition(new Vec2(80, -30));
+        new Ground(world, 60, 20).setPosition(new Vec2(80, -20));
 
-        Ground ground4 = new Ground(world, 60, 20);
-        ground4.setPosition(new Vec2(80, -20));
-
-        Tree tree1 = Tree.generate(world);
-        tree1.setPosition(new Vec2(4,-13));
-
-        Tree tree2 = Tree.generate(world);
-        tree2.setPosition(new Vec2(12,-13));
-
-        Tree tree3 = Tree.generate(world);
-        tree3.setPosition(new Vec2(60,-3));
-
-        Enemy enemy = new Enemy(world);
-        enemy.setPosition(new Vec2(80, -17));
+        Tree.generate(world).setPosition(new Vec2(4,-13));
+        Tree.generate(world).setPosition(new Vec2(12,-13));
+        Tree.generate(world).setPosition(new Vec2(60,-3));
 
         for (int i = 0; i < 5; i++) {
             this.clouds[i] = new Cloud();
