@@ -5,6 +5,7 @@ import events.GameOverListener;
 import game.objects.PlayerBullet;
 import org.jbox2d.common.Vec2;
 import game.objects.Ground;
+import utilities.resources.Sounds;
 
 public class Player extends Character {
 
@@ -80,14 +81,24 @@ public class Player extends Character {
 
     public void replenishAmmo(int amount) {
 
+        this.pickup();
+
         this.ammo += amount;
         if (this.ammo > this.maxAmmo) {
             this.ammo = this.maxAmmo;
         }
     }
 
+    private void pickup() {
+
+        if (Sounds.PICK_UP_SFX != null) {
+            Sounds.PICK_UP_SFX.play();
+        }
+    }
+
     public void increaseHitpoint(int percentage) {
 
+        this.pickup();
         this.hitpoint = Math.min(100, (float) (100 + percentage) / 100 * this.hitpoint);
     }
 
@@ -165,6 +176,25 @@ public class Player extends Character {
             if (this.isGrounded) {
                 this.isGrounded = false;
                 actualVSpeed = this.baseVSpeed;
+
+                if (Sounds.JUMP_SFX != null) {
+                    Sounds.JUMP_SFX.play();
+                }
+
+                if (Sounds.STEP_SFX != null) {
+                    Sounds.STEP_SFX.stop();
+                }
+            }
+        }
+
+        if (!this.isShooting) {
+            if (Sounds.SHOOT_SFX != null) {
+                Sounds.SHOOT_SFX.stop();
+            }
+        }
+        else {
+            if (Sounds.SHOOT_SFX != null) {
+                Sounds.SHOOT_SFX.loop();
             }
         }
 
@@ -173,9 +203,17 @@ public class Player extends Character {
         }
         else {
             if (this.isMoving) {
+                if (Sounds.STEP_SFX != null) {
+                    Sounds.STEP_SFX.loop();
+                }
+
                 this.switchCurrentImage(this.isShooting ? Player.RUN_SHOOT_IMAGE : Player.RUN_IMAGE);
             }
             else {
+                if (Sounds.STEP_SFX != null) {
+                    Sounds.STEP_SFX.stop();
+                }
+
                 this.switchCurrentImage(this.isShooting ? Player.STAND_SHOOT_IMAGE : Player.IDLE_IMAGE);
             }
         }
