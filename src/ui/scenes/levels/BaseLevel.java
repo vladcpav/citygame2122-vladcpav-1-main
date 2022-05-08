@@ -3,121 +3,146 @@ package ui.scenes.levels;
 import game.characters.Player;
 
 import city.cs.engine.*;
-import game.events.LevelAdapter;
-import game.levels.Level;
+import org.jbox2d.common.Vec2;
 import ui.Application;
 import ui.scenes.BaseScene;
 
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class BaseLevel extends BaseScene {
+public abstract class BaseLevel extends BaseScene {
 
-    private Level level;
+    protected Player player;
+    protected World world;
     private UserView view;
+    private KeyListener keyListener;
+    private StepListener stepListener;
 
-    private KeyListener keyListener = new KeyListener() {
-
-        @Override
-        public void keyTyped(KeyEvent e) {}
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-
-            Player player = BaseLevel.this.level.getPlayer();
-
-            System.out.println("Test");
-
-            if (e.getKeyCode() == 68) {
-                player.moveForward();
-                return;
-            }
-
-            if (e.getKeyCode() == 65) {
-                player.moveBackwards();
-                return;
-            }
-
-            if (e.getKeyCode() == 87) {
-                player.jump();
-                return;
-            }
-
-            if (e.getKeyCode() == 32) {
-                player.shoot();
-                return;
-            }
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-
-            Player player = BaseLevel.this.level.getPlayer();
-
-            if ((e.getKeyCode() == 68 && player.isMovingForward())
-                    || (e.getKeyCode() == 65 && player.isMovingBackwards())) {
-
-                player.stopMoving();
-                return;
-            }
-
-            if (e.getKeyCode() == 87) {
-                player.stopJumping();
-                return;
-            }
-
-            if (e.getKeyCode() == 32) {
-                player.stopShooting();
-                return;
-            }
-        }
-    };
-
-    BaseLevel(Application application, Level level) {
+    BaseLevel(Application application) {
 
         super(application);
-        this.level = level;
     }
 
     @Override
     public void cleanup() {
 
-        this.level.cleanup();
+        // Cleanup world
+
+        this.world.stop();
+        this.world.removeStepListener(this.stepListener);
+
+        for (StaticBody body: this.world.getStaticBodies()) {
+            body.destroy();
+        }
+
+        for (DynamicBody body: this.world.getDynamicBodies()) {
+            body.destroy();
+        }
+
         this.application.removeKeyListener(this.keyListener);
+
+        // Nullify fields
+
+        this.world = null;
+        this.player = null;
+        this.view = null;
+        this.keyListener = null;
+        this.stepListener = null;
     }
 
     @Override
-    protected void scaffold(JPanel panel) {
+    public void scaffold() {
 
-        this.view = new UserView(this.level, this.application.getWidth(), this.application.getHeight());
+        // Setup
+
+        this.world = new World();
+        this.player = new Player(this.world);
+        this.view = new UserView(this.world, this.application.getWidth(), this.application.getHeight());
+        this.view.setOpaque(false);
+        new DebugViewer(this.world, 500, 500);
+
+        // Build world
+
+        this.build();
 
         // Listeners
 
-        this.level.setLevelListener(new LevelAdapter() {
+        this.keyListener = new KeyListener() {
 
             @Override
-            public void stepped() {
+            public void keyTyped(KeyEvent e) {}
 
-                BaseLevel.this.view.setCentre(BaseLevel.this.level.getPlayer().getPosition());
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+                Player player = BaseLevel.this.player;
+
+                if (e.getKeyCode() == 68) {
+                    player.moveForward();
+                    return;
+                }
+
+                if (e.getKeyCode() == 65) {
+                    player.moveBackwards();
+                    return;
+                }
+
+                if (e.getKeyCode() == 87) {
+                    player.jump();
+                    return;
+                }
+
+                if (e.getKeyCode() == 32) {
+                    player.shoot();
+                    return;
+                }
             }
 
             @Override
-            public void finished() {
+            public void keyReleased(KeyEvent e) {
 
-                System.out.println("Level finished. Cleaning up...");
+                Player player = BaseLevel.this.player;
 
-                BaseLevel.this.cleanup();
-                application.loadNextLevel();
+                if ((e.getKeyCode() == 68 && player.isMovingForward())
+                        || (e.getKeyCode() == 65 && player.isMovingBackwards())) {
+
+                    player.stopMoving();
+                    return;
+                }
+
+                if (e.getKeyCode() == 87) {
+                    player.stopJumping();
+                    return;
+                }
+
+                if (e.getKeyCode() == 32) {
+                    player.stopShooting();
+                    return;
+                }
             }
-        });
+        };
 
         this.application.addKeyListener(this.keyListener);
 
-        panel.add(this.view);
-        this.view.setOpaque(false);
+        this.stepListener = new StepListener() {
 
-        this.level.start();
+            @Override
+            public void preStep(StepEvent stepEvent) {}
+
+            @Override
+            public void postStep(StepEvent stepEvent) {
+
+                BaseLevel.this.player.update();
+                BaseLevel.this.view.setCentre(new Vec2(BaseLevel.this.player.getPosition().x + 16, BaseLevel.this.view.getCentre().y));
+            }
+        };
+
+        this.world.addStepListener(this.stepListener);
+
+        this.add(this.view);
+        this.world.start();
     }
+
+    protected abstract void build();
 }
 

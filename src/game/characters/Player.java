@@ -3,39 +3,56 @@ package game.characters;
 import city.cs.engine.*;
 import game.objects.Bullet;
 import org.jbox2d.common.Vec2;
-import game.objects.Floor;
+import game.objects.Ground;
+
+import java.lang.reflect.Field;
+import java.util.Random;
 
 public class Player extends DynamicBody {
 
     // Sprite definitions
 
-    private static final BodyImage IDLE_IMAGE = new BodyImage("resources/sprites/player-idle.gif", 4);
-    private static final BodyImage JUMP_IMAGE = new BodyImage("resources/sprites/player-jump.png", 4);
-    private static final BodyImage RUN_IMAGE = new BodyImage("resources/sprites/player-run.gif", 4);
-    private static final BodyImage RUN_SHOOT_IMAGE = new BodyImage("resources/sprites/player-run-shoot.gif", 4);
-    private static final BodyImage STAND_SHOOT_IMAGE = new BodyImage("resources/sprites/player-stand-shoot.gif", 4);
+    private static final BodyImage IDLE_IMAGE = new BodyImage("resources/sprites/player-idle.gif", 6);
+    private static final BodyImage JUMP_IMAGE = new BodyImage("resources/sprites/player-jump.png", 6);
+    private static final BodyImage RUN_IMAGE = new BodyImage("resources/sprites/player-run.gif", 6);
+    private static final BodyImage RUN_SHOOT_IMAGE = new BodyImage("resources/sprites/player-run-shoot.gif", 6);
+    private static final BodyImage STAND_SHOOT_IMAGE = new BodyImage("resources/sprites/player-stand-shoot.gif", 6);
 
     // States
 
     private AttachedImage currentImage;
-    private float baseVSpeed = 8;
-    private float baseHSpeed = 10;
+    private float baseVSpeed = 70;
+    private float baseHSpeed = 40;
     private int direction = 1;                  // 1 = forward, -1 = backwards
     private boolean isGrounded = true;
     private boolean isJumping = false;
     private boolean isMoving = false;
     private boolean isShooting = false;
     private int baseAmmo = 50;
-    private int baseCooldown = 20;
+    private int baseCooldown = 10;
     private int ammo = this.baseAmmo;
     private int cooldown = 0;
     private float hitpoint = 100;
 
+    private Random rng = new Random();
+
     public Player(World world) {
 
-        super(world, new BoxShape(2, 2));
+        super(world, new BoxShape(3, 3));
+
+        // Hack to set body rotation
+
+        try {
+            Field b2bodyField = this.getClass().getSuperclass().getSuperclass().getDeclaredField("b2body");
+            b2bodyField.setAccessible(true);
+            ((org.jbox2d.dynamics.Body) b2bodyField.get(this)).setFixedRotation(true);
+        }
+        catch (IllegalAccessException | NoSuchFieldException exception) {
+            System.out.println(exception);
+        }
 
         this.switchCurrentImage(Player.IDLE_IMAGE);
+        this.setGravityScale(15);
 
         this.addCollisionListener(e -> {
 
@@ -45,7 +62,7 @@ public class Player extends DynamicBody {
                 return;
             }
 
-            if (otherBody instanceof Floor &&
+            if (otherBody instanceof Ground &&
                     !Player.this.isGrounded) {
 
                 Player.this.isGrounded = true;
@@ -180,7 +197,7 @@ public class Player extends DynamicBody {
 
                 Bullet bullet = new Bullet(this.getWorld(), this.direction);
                 Vec2 currentPosition = this.getPosition();
-                bullet.setPosition(new Vec2(currentPosition.x + 2 * this.direction, currentPosition.y));
+                bullet.setPosition(new Vec2(currentPosition.x + 3 * this.direction, currentPosition.y));
             }
             else {
                 this.cooldown--;

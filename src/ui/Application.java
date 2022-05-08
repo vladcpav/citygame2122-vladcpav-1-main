@@ -64,7 +64,8 @@ public class Application extends JFrame {
 
         System.out.println("Scaffolding new scene: " + scene.getClass().getName());
         this.currentScene = scene;
-        this.setContentPane(scene.build());
+        scene.scaffold();
+        this.setContentPane(scene);
         this.revalidate();
     }
 }

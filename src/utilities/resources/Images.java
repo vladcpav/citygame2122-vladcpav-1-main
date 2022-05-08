@@ -5,11 +5,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Backgrounds {
+public class Images {
 
-    public static BufferedImage load(String fileName) {
+    public static BufferedImage load(String path) {
 
-        String fullPath = String.join(File.separator, "resources", "backgrounds", fileName);
+        String fullPath = "resources" + path;
 
         try {
             return ImageIO.read(new File(fullPath));

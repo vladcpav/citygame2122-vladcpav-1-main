@@ -4,7 +4,7 @@ import ui.Application;
 import ui.components.Button;
 import ui.components.Text;
 import ui.components.TransparentPanel;
-import utilities.resources.Backgrounds;
+import utilities.resources.Images;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,11 +13,17 @@ public class Menu extends BaseScene {
 
     public Menu(Application application) {
 
-        super(application, Backgrounds.load("menu.png"));
+        super(application);
     }
 
     @Override
-    protected void scaffold(JPanel panel) {
+    protected void paintComponent(Graphics g) {
+
+        super.paintComponent(g);
+        g.drawImage(Images.load("/backgrounds/menu.png"), 0, 0, this.getWidth(), this.getHeight(), null);
+    }
+
+    public void scaffold() {
 
         Button startButton = new Button("Start", (e) -> {
 
@@ -30,12 +36,12 @@ public class Menu extends BaseScene {
             this.application.close();
         });
 
-        panel.setLayout(new BorderLayout());
+        this.setLayout(new BorderLayout());
 
         Text title = new Text("Commando", "bold", 140);
         title.setHorizontalAlignment(SwingConstants.CENTER);
 
-        panel.add(title, BorderLayout.PAGE_START);
+        this.add(title, BorderLayout.PAGE_START);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         TransparentPanel buttons = new TransparentPanel();
@@ -47,7 +53,7 @@ public class Menu extends BaseScene {
 
         buttons.add(Box.createVerticalGlue());
 
-        panel.add(buttons, BorderLayout.CENTER);
+        this.add(buttons, BorderLayout.CENTER);
     }
 
     private void addButton(Button button, TransparentPanel panel) {
