@@ -61,9 +61,7 @@ public class Level1 extends BaseLevel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-
-        super.paintComponent(g);
+    protected void draw(Graphics g) {
 
         g.drawImage(Images.load("/backgrounds/background-sky.png"), 0, 0, this.getWidth(), this.getHeight(), null);
         this.drawClouds(g);
@@ -75,8 +73,6 @@ public class Level1 extends BaseLevel {
 
         g.drawImage(image, 300, this.getHeight() - targetHeight - 200, targetWidth, targetHeight, null);
         g.drawImage(image, 600 + targetWidth, this.getHeight() - targetHeight - 300, targetWidth, targetHeight, null);
-
-        this.paintStats(g);
     }
 
     private void drawClouds(Graphics g) {

@@ -26,11 +26,11 @@ public class Player extends Character {
     private boolean isJumping = false;
     private boolean isMoving = false;
     private boolean isShooting = false;
-    private int baseAmmo = 50;
+    private int maxAmmo = 50;
     private int baseCooldown = 10;
-    private int ammo = this.baseAmmo;
+    private int ammo = this.maxAmmo;
     private int cooldown = 0;
-    private float hitpoint = 100;
+    private float hitpoint = this.maxHitpoint;
 
     private GameOverListener gameOverListener;
 
@@ -67,6 +67,11 @@ public class Player extends Character {
         return this.ammo;
     }
 
+    public int getMaxAmmo() {
+
+        return this.maxAmmo;
+    }
+
     @Override
     public void destroy() {
 
@@ -76,8 +81,8 @@ public class Player extends Character {
     public void replenishAmmo(int amount) {
 
         this.ammo += amount;
-        if (this.ammo > this.baseAmmo) {
-            this.ammo = this.baseAmmo;
+        if (this.ammo > this.maxAmmo) {
+            this.ammo = this.maxAmmo;
         }
     }
 

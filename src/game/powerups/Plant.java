@@ -18,8 +18,8 @@ public class Plant extends Powerup {
 
                 Body otherBody = e.getContactBody();
                 if (otherBody instanceof Player) {
-                    Random ran = new Random();
-                    ((Player) otherBody).increaseHitpoint(ran.nextInt(5) + 5);
+                    Random rng = new Random();
+                    ((Player) otherBody).increaseHitpoint(rng.nextInt(5) + 5);
                     Plant.this.destroy();
                 }
             }

@@ -8,10 +8,13 @@ import game.objects.Shelter;
 import org.jbox2d.common.Vec2;
 import ui.Application;
 import ui.scenes.BaseScene;
+import utilities.resources.Fonts;
+import utilities.resources.Images;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public abstract class BaseLevel extends BaseScene {
@@ -182,15 +185,40 @@ public abstract class BaseLevel extends BaseScene {
         return enemy;
    }
 
-   protected void paintStats(Graphics g) {
+   @Override
+   protected void paintComponent(Graphics g) {
 
-       g.setColor(Color.RED);
-       g.fillRect(150, 50, 500, 60);
+       super.paintComponent(g);
+       this.draw(g);
 
-       g.setColor(Color.GREEN);
-       g.fillRect(150, 50, Math.round(this.player.getHitpoint() / this.player.getMaxHitpoint() * 500), 60);
+       for (int i = 0; i < 10; i++) {
+           this.drawLifeUnit(g, Images.load("/ui/life-empty.png"), 100 + i * 40, 50);
+       }
+
+       int lifeCount = Math.round(this.player.getHitpoint() / this.player.getMaxHitpoint() * 10);
+
+       for (int i = 0; i < lifeCount; i++) {
+           this.drawLifeUnit(g, Images.load("/ui/life-unit.png"), 100 + i * 40, 50);
+       }
+
+       BufferedImage ammoIcon = Images.load("/ui/ammo.png");
+       int sf = 50 / ammoIcon.getHeight();
+
+       g.drawImage(ammoIcon, 550, 50, ammoIcon.getWidth() * sf, 50, null);
+
+       g.setFont(Fonts.GAME_FONT_REGULAR.deriveFont(40f));
+       g.drawString(this.player.getAmmo() + " / " + this.player.getMaxAmmo(), 690, 80);
    }
 
-    protected abstract void build();
+   private void drawLifeUnit(Graphics g, BufferedImage image, int x, int y) {
+
+        int sf = 50 / image.getHeight();
+
+        g.drawImage(image, x, y, image.getWidth() * sf, 50, null);
+   }
+
+   protected void draw(Graphics g) {}
+
+   protected abstract void build();
 }
 

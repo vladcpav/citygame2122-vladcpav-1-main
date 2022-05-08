@@ -18,8 +18,8 @@ public class Ammo extends Powerup {
 
                 Body otherBody = e.getContactBody();
                 if (otherBody instanceof Player) {
-                    Random ran = new Random();
-                    ((Player) otherBody).replenishAmmo(ran.nextInt(10) + 10);
+                    Random rng = new Random();
+                    ((Player) otherBody).replenishAmmo(rng.nextInt(10) + 10);
                     Ammo.this.destroy();
                 }
             }
